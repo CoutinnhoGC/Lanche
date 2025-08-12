@@ -1,4 +1,8 @@
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -47,19 +51,37 @@ public class CadastroProdutos {
         scanner.nextLine();
 
         String caminhoDaImagem;
+        Path destinoImagem = null;
+
         while (true) {
             System.out.print("Informe o caminho da imagem: ");
             caminhoDaImagem = scanner.nextLine();
             File arquivo = new File(caminhoDaImagem);
 
             if (arquivo.exists() && arquivo.isFile()) {
-                break; 
+                try {
+  
+                    File pastaImagens = new File("imagens");
+                    if (!pastaImagens.exists()) {
+                        pastaImagens.mkdirs();
+                    }
+
+                    destinoImagem = new File(pastaImagens, arquivo.getName()).toPath();
+
+                    Files.copy(arquivo.toPath(), destinoImagem, StandardCopyOption.REPLACE_EXISTING);
+
+                    System.out.println(" Imagem copiada para: " + destinoImagem.toString());
+                    break;
+
+                } catch (IOException e) {
+                    System.out.println(" Erro ao copiar a imagem: " + e.getMessage());
+                }
             } else {
-                System.out.println("❌ Caminho inválido ou arquivo não encontrado. Tente novamente.");
+                System.out.println(" Caminho inválido ou arquivo não encontrado. Tente novamente.");
             }
         }
 
-        produtos.add(new Produto(codigo, descricao, preco, caminhoDaImagem));
+        produtos.add(new Produto(codigo, descricao, preco, destinoImagem.toString()));
         System.out.println("Produto cadastrado!");
     }
 
