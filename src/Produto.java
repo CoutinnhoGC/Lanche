@@ -2,12 +2,14 @@ public class Produto {
     private int codigo;
     private String descricao;
     private double preco;
+    private int quantidade;
     private String caminhoDaImagem;
 
-    public Produto(int codigo, String descricao, double preco, String caminhoDaImagem) {
+    public Produto(int codigo, String descricao, double preco, String caminhoDaImagem, int quantidade) {
         this.codigo = codigo;
         this.descricao = descricao;
         this.preco = preco;
+        this.quantidade = quantidade;
         this.caminhoDaImagem = caminhoDaImagem;
     }
 
@@ -23,6 +25,10 @@ public class Produto {
         return preco;
     }
 
+    public int getQuantidade() {
+        return quantidade;
+    }
+
     public String getCaminhoDaImagem() {
         return caminhoDaImagem;
     }
@@ -35,6 +41,10 @@ public class Produto {
         this.preco = preco;
     }
 
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+    
     public void setCaminhoDaImagem(String caminhoDaImagem) {
         this.caminhoDaImagem = caminhoDaImagem;
     }
@@ -45,6 +55,7 @@ public class Produto {
                 "\nCodigo:" + codigo +
                 "\nDescricao:'" + descricao + '\'' +
                 "\nPreco: R$ " + preco +
+                "\nQuantidade: " + quantidade +
                 "\nCaminhoDaImagem:'" + caminhoDaImagem + '\'' +
                 '}';
     }
