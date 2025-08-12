@@ -1,0 +1,122 @@
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class CadastroProdutos {
+    private static ArrayList<Produto> produtos = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+   
+
+    public static void main(String[] args) {
+        int opcao;
+
+        do {
+            System.out.println("\n--- LANCHE ---");
+            System.out.println("1 - Cadastrar produto");
+            System.out.println("2 - Editar produto");
+            System.out.println("3 - Excluir produto");
+            System.out.println("4 - Listar produtos");
+            System.out.println("5 - Vender produto");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
+                case 1 -> cadastrar();
+                case 2 -> editar();
+                case 3 -> excluir();
+                case 4 -> listar();
+                case 5 -> vender();
+                case 0 -> System.out.println("Saindo...");
+                default -> System.out.println("Opção inválida!");
+            }
+        } while (opcao != 0);
+    }
+
+    private static void cadastrar() {
+        System.out.print("Informe o Código: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Informe a Descrição: ");
+        String descricao = scanner.nextLine();
+
+        System.out.print("Informe o Preço: ");
+        double preco = scanner.nextDouble();
+        scanner.nextLine();
+
+        String caminhoDaImagem;
+        while (true) {
+            System.out.print("Informe o caminho da imagem: ");
+            caminhoDaImagem = scanner.nextLine();
+            File arquivo = new File(caminhoDaImagem);
+
+            if (arquivo.exists() && arquivo.isFile()) {
+                break; 
+            } else {
+                System.out.println("❌ Caminho inválido ou arquivo não encontrado. Tente novamente.");
+            }
+        }
+
+        produtos.add(new Produto(codigo, descricao, preco, caminhoDaImagem));
+        System.out.println("Produto cadastrado!");
+    }
+
+    private static void editar() {
+        System.out.print("Informe o código do produto: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        for (Produto p : produtos) {
+            if (p.getCodigo() == codigo) {
+                System.out.print("Nova descrição: ");
+                p.setDescricao(scanner.nextLine());
+
+                System.out.print("Novo preço: ");
+                p.setPreco(scanner.nextDouble());
+                scanner.nextLine();
+
+                System.out.print("Novo caminho da imagem: ");
+                p.setCaminhoDaImagem(scanner.nextLine());
+
+                System.out.println("Produto atualizado!");
+                return;
+            }
+        }
+        System.out.println("Produto não encontrado.");
+    }
+
+    private static void excluir() {
+        System.out.print("Informe o código do produto: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        produtos.removeIf(p -> p.getCodigo() == codigo);
+        System.out.println("Produto removido!");
+    }
+
+    private static void listar() {
+        if (produtos.isEmpty()) {
+            System.out.println("Nenhum produto cadastrado.");
+            return;
+        }
+        for (Produto p : produtos) {
+            System.out.println(p);
+        }
+    }
+
+    private static void vender() {
+        System.out.print("Informe o código do produto: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        for (Produto p : produtos) {
+            if (p.getCodigo() == codigo) {
+                System.out.println("Produto vendido: " + p.getDescricao());
+                return;
+            }
+        }
+        System.out.println("Produto não encontrado.");
+    }
+}
